@@ -36,3 +36,11 @@ jobs:
 
       - name: Secret Message
         run: echo "Secret - ${{ secrets.Message }}"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - run: echo "Deploy Application"
+      
