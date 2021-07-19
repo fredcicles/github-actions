@@ -4,7 +4,7 @@
 # Use environments to require manual approvals between jobs
 # Environments require public repositories or private repositories on GitHub with Enterprise plans
 
-name: Continuous Delivery
+name: "Continuous Delivery"
 
 on: 
   push:
