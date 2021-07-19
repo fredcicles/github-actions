@@ -1,0 +1,66 @@
+# yaml-language-server: https://json.schemastore.org/github-workflow.json
+
+# Continuous Delivery Example (requires manual intervention to deploy to each environment)
+# Use environments to require manual approvals between jobs
+# Environments require public repositories or private repositories on GitHub with Enterprise plans
+
+name: "Continuous Delivery"
+
+on: 
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  
+  # Build Application
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out the repository under $GITHUB_WORKSPACE, so the job can access it
+      - uses: actions/checkout@v2
+
+      - name: Build Steps Here
+        run: echo "Secret - ${{ secrets.Message }}"
+
+  # Deploy to DEV
+  deploy-to-dev:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: DEV
+    
+    steps:
+      - name: Deploy to DEV
+        run: echo "Deploy Application to DEV"
+
+  # Deploy to UAT
+  deploy-to-uat:
+    needs: deploy-to-dev
+    runs-on: ubuntu-latest
+    environment: UAT
+    
+    steps:
+      - name: Deploy to UAT
+        run: echo "Deploy Application to UAT"
+
+  # Deploy to Stage
+  deploy-to-stage:
+    needs: deploy-to-uat
+    runs-on: ubuntu-latest
+    environment: STAGE
+    
+    steps:
+      - name: Deploy to STAGE
+        run: echo "Deploy Application to Stage"
+
+  # Deploy to Prod
+  deploy-to-prod:
+    needs: deploy-to-stage
+    runs-on: ubuntu-latest
+    environment: PROD
+    
+    steps:
+      - name: Deploy to PROD
+        run: echo "Deploy Application to Production"
