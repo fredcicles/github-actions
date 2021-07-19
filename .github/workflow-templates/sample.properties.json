@@ -3,7 +3,7 @@
     "description": "Sample Organization CI workflow template.",
     "iconName": "example-icon",
     "categories": [
-        "Go"
+        "JavaScript", "DotNetCore"
     ],
     "filePatterns": [
         "package.json$",
