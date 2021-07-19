@@ -29,6 +29,7 @@ jobs:
   deploy-to-dev:
     needs: build
     runs-on: ubuntu-latest
+    environment: DEV
     
     steps:
       - name: Deploy to DEV
@@ -38,6 +39,7 @@ jobs:
   deploy-to-uat:
     needs: deploy-to-dev
     runs-on: ubuntu-latest
+    environment: UAT
     
     steps:
       - name: Deploy to UAT
@@ -47,6 +49,7 @@ jobs:
   deploy-to-stage:
     needs: deploy-to-uat
     runs-on: ubuntu-latest
+    environment: STAGE
     
     steps:
       - name: Deploy to STAGE
@@ -56,6 +59,7 @@ jobs:
   deploy-to-prod:
     needs: deploy-to-stage
     runs-on: ubuntu-latest
+    environment: PROD
     
     steps:
       - name: Deploy to PROD
