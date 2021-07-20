@@ -16,6 +16,7 @@ jobs:
   
   # Build Application
   build:
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
@@ -27,7 +28,7 @@ jobs:
 
   # Deploy to DEV
   deploy-to-dev:
-    name: "Deploy to DEV"
+    name: Deploy to DEV
     needs: build
     runs-on: ubuntu-latest
     environment: DEV
