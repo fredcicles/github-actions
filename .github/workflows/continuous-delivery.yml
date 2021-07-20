@@ -4,7 +4,7 @@
 # Use environments to require manual approvals between jobs
 # Environments require public repositories or private repositories on GitHub with Enterprise plans
 
-name: "Continuous Delivery"
+name: Continuous Delivery
 
 on: 
   push:
@@ -39,7 +39,7 @@ jobs:
 
   # Deploy to UAT
   deploy-to-uat:
-    name: "Deploy to UAT"
+    name: Deploy to UAT
     needs: deploy-to-dev
     runs-on: ubuntu-latest
     environment: UAT
@@ -50,7 +50,7 @@ jobs:
 
   # Deploy to Stage
   deploy-to-stage:
-    name: "Deploy to STAGE"
+    name: Deploy to STAGE
     needs: deploy-to-uat
     runs-on: ubuntu-latest
     environment: STAGE
@@ -61,7 +61,7 @@ jobs:
 
   # Deploy to Prod
   deploy-to-prod:
-    name: "Deploy to PROD"
+    name: Deploy to PROD
     needs: deploy-to-stage
     runs-on: ubuntu-latest
     environment: PROD
