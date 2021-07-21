@@ -15,8 +15,7 @@ on:
 jobs:
   
   # Build Application
-  build:
-    name: Build
+  Build:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,9 +26,10 @@ jobs:
         run: echo "Secret - ${{ secrets.Message }}"
 
   # Deploy to DEV
-  deploy-to-dev:
-    name: Deploy to DEV
-    needs: build
+  DeployDev:
+    name: Development
+    if: github.event_name == 'pull_request'
+    needs: Build
     runs-on: ubuntu-latest
     environment: DEV
     
@@ -38,9 +38,9 @@ jobs:
         run: echo "Deploy Application to DEV"
 
   # Deploy to UAT
-  deploy-to-uat:
-    name: Deploy to UAT
-    needs: deploy-to-dev
+  DeployUat:
+    name: UAT
+    needs: DeployDev
     runs-on: ubuntu-latest
     environment: UAT
     
@@ -49,9 +49,9 @@ jobs:
         run: echo "Deploy Application to UAT"
 
   # Deploy to Stage
-  deploy-to-stage:
-    name: Deploy to STAGE
-    needs: deploy-to-uat
+  DeployStage:
+    name: Stage
+    needs: DeployUat
     runs-on: ubuntu-latest
     environment: STAGE
     
@@ -60,9 +60,9 @@ jobs:
         run: echo "Deploy Application to Stage"
 
   # Deploy to Prod
-  deploy-to-prod:
-    name: Deploy to PROD
-    needs: deploy-to-stage
+  DeployProduction:
+    name: Production
+    needs: DeployStage
     runs-on: ubuntu-latest
     environment: PROD
     
