@@ -25,7 +25,7 @@ jobs:
       - name: Build Steps Here
         run: echo "Secret - ${{ secrets.Message }}"
 
-  # Deploy to DEV
+  # Deploy to the Development servers
   DeployDev:
     name: Development
     if: github.event_name == 'pull_request'
@@ -37,7 +37,7 @@ jobs:
       - name: Deploy to DEV
         run: echo "Deploy Application to DEV"
 
-  # Deploy to UAT
+  # Deploy to the UAT servers
   DeployUat:
     name: UAT
     if: github.event.ref == 'refs/heads/main'
@@ -51,7 +51,7 @@ jobs:
       - name: Deploy to UAT
         run: echo "Deploy Application to UAT"
 
-  # Deploy to Stage
+  # Deploy to the Staging servers
   DeployStage:
     name: Stage
     needs: DeployUat
@@ -61,10 +61,10 @@ jobs:
       url: https://stage.application.com
     
     steps:
-      - name: Deploy to STAGE
+      - name: Deploy to Stage
         run: echo "Deploy Application to Stage"
 
-  # Deploy to Prod
+  # Deploy to the Production servers
   DeployProduction:
     name: Production
     needs: DeployStage
@@ -74,5 +74,5 @@ jobs:
       url: https://application.com
 
     steps:
-      - name: Deploy to PROD
+      - name: Deploy to Production
         run: echo "Deploy Application to Production"
