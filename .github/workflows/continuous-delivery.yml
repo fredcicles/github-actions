@@ -43,7 +43,9 @@ jobs:
     if: github.event.ref == 'refs/heads/main'
     needs: Build
     runs-on: ubuntu-latest
-    environment: UAT
+    environment: 
+      name: UAT
+      url: https://uat.application.com
     
     steps:
       - name: Deploy to UAT
@@ -54,7 +56,9 @@ jobs:
     name: Stage
     needs: DeployUat
     runs-on: ubuntu-latest
-    environment: STAGE
+    environment: 
+      name: STAGE
+      url: https://stage.application.com
     
     steps:
       - name: Deploy to STAGE
@@ -65,8 +69,10 @@ jobs:
     name: Production
     needs: DeployStage
     runs-on: ubuntu-latest
-    environment: PROD
-    
+    environment: 
+      name: PROD
+      url: https://application.com
+
     steps:
       - name: Deploy to PROD
         run: echo "Deploy Application to Production"
