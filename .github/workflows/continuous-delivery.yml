@@ -31,10 +31,10 @@ jobs:
     if: github.event_name == 'pull_request'
     needs: Build
     runs-on: ubuntu-latest
-    environment: DEV
+    environment: Development
     
     steps:
-      - name: Deploy to DEV
+      - name: Deploy to Development
         run: echo "Deploy Application to DEV"
 
   # Deploy to the UAT servers
@@ -57,7 +57,7 @@ jobs:
     needs: DeployUat
     runs-on: ubuntu-latest
     environment: 
-      name: STAGE
+      name: Stage
       url: https://stage.application.com
     
     steps:
@@ -70,7 +70,7 @@ jobs:
     needs: DeployStage
     runs-on: ubuntu-latest
     environment: 
-      name: PROD
+      name: Production
       url: https://application.com
 
     steps:
