@@ -55,7 +55,7 @@ jobs:
       - uses: azure/arm-deploy@v1
         id: deployStep
         with:
-          subscriptionId: ${{ secrets.devSubscriptionId }}
+          subscriptionId: ${{ secrets.SUBSCRIPTIONID }}
           resourceGroupName:  ${{ env.devResourceGroup }}
           template: /infra/azuredeploy.json
           parameters: /infra/azuredeploy.dev.parameters.json
@@ -78,7 +78,7 @@ jobs:
       - uses: azure/arm-deploy@v1
         id: deployStep
         with:
-          subscriptionId: ${{ secrets.qaSubscriptionId }}
+          subscriptionId: ${{ secrets.SUBSCRIPTIONID }}
           resourceGroupName:  ${{ env.qaResourceGroup }}
           template: /infra/azuredeploy.json
           parameters: /infra/azuredeploy.qa.parameters.json
@@ -103,7 +103,7 @@ jobs:
       - uses: azure/arm-deploy@v1
         id: deployStep
         with:
-          subscriptionId: ${{ secrets.prodSubscriptionId }}
+          subscriptionId: ${{ secrets.SUBSCRIPTIONID }}
           resourceGroupName: ${{ env.prodResourceGroup }}
           template: /infra/azuredeploy.json
           parameters: /infra/azuredeploy.stage.parameters.json
