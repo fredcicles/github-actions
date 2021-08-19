@@ -12,6 +12,17 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  deploymentSlotName: stage
+  devResourceGroup: rg-dev
+  devUrl: https://dev.application.com
+  prodResourceGroup: rg-prod
+  prodUrl: https://application.com
+  qaResourceGroup: rg-qa
+  qaUrl: https://qa.application.com
+  stageUrl: https://stage.application.com
+  webAppName: sample-app
+
 jobs:
   
   # Build Application
@@ -23,7 +34,8 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build Steps Here
-        run: echo "Secret - ${{ secrets.Message }}"
+        run: echo "Running build steps..."
+
 
   # Deploy to the Development servers
   DeployDev:
@@ -31,38 +43,74 @@ jobs:
     if: github.event_name == 'pull_request'
     needs: Build
     runs-on: ubuntu-latest
-    environment: Development
+    environment: 
+      name: Development
+      url: ${{ env.devUrl }}
     
     steps:
-      - name: Deploy to Development
-        run: echo "Deploy Application to DEV"
+      #- uses: azure/login@v1
+      #  with:
+      #    creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-  # Deploy to the UAT servers
-  DeployUat:
-    name: UAT
+      - uses: azure/arm-deploy@v1
+        id: deployStep
+        with:
+          subscriptionId: ${{ secrets.devSubscriptionId }}
+          resourceGroupName:  ${{ env.devResourceGroup }}
+          template: /infra/azuredeploy.json
+          parameters: /infra/azuredeploy.dev.parameters.json
+
+      - name: Deployment Message
+        run: echo "Deployed Application to ${{ steps.deployStep.outputs.output1 }}"
+
+
+  # Deploy to the QA servers
+  DeployQA:
+    name: QA
     if: github.event.ref == 'refs/heads/main'
     needs: Build
     runs-on: ubuntu-latest
     environment: 
-      name: UAT
-      url: https://uat.application.com
+      name: QA
+      url: ${{ env.qaUrl }}
     
     steps:
-      - name: Deploy to UAT
-        run: echo "Deploy Application to UAT"
+      - uses: azure/arm-deploy@v1
+        id: deployStep
+        with:
+          subscriptionId: ${{ secrets.qaSubscriptionId }}
+          resourceGroupName:  ${{ env.qaResourceGroup }}
+          template: /infra/azuredeploy.json
+          parameters: /infra/azuredeploy.qa.parameters.json
+
+      - name: Deployment Message
+        run: echo "Deployed Application to ${{ steps.deployStep.outputs.output1 }}"
+
 
   # Deploy to the Staging servers
   DeployStage:
     name: Stage
-    needs: DeployUat
+    needs: DeployQA
     runs-on: ubuntu-latest
     environment: 
       name: Stage
-      url: https://stage.application.com
+      url: ${{ env.stageUrl }}
     
     steps:
       - name: Deploy to Stage
         run: echo "Deploy Application to Stage"
+
+      - uses: azure/arm-deploy@v1
+        id: deployStep
+        with:
+          subscriptionId: ${{ secrets.prodSubscriptionId }}
+          resourceGroupName: ${{ env.prodResourceGroup }}
+          template: /infra/azuredeploy.json
+          parameters: /infra/azuredeploy.stage.parameters.json
+
+      - name: Deployment Message
+        run: echo "Deployed Application to ${{ steps.deployStep.outputs.output1 }}"
+
 
   # Deploy to the Production servers
   DeployProduction:
@@ -71,8 +119,15 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: Production
-      url: https://application.com
+      url: ${{ env.prodUrl }}
 
     steps:
       - name: Deploy to Production
         run: echo "Deploy Application to Production"
+
+      # Azure CLI command for WebApp Deployment Slot swapping
+      # https://docs.microsoft.com/en-us/cli/azure/webapp/deployment/slot?view=azure-cli-latest
+      - uses: azure/cli@v1
+        with:
+          inlineScript: |
+            az webapp deployment slot swap -g ${{ env.prodResourceGroup }} -n ${{ env.webAppName }} -s ${{ env.deploymentSlotName }}
