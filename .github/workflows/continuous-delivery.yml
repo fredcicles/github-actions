@@ -75,6 +75,10 @@ jobs:
       url: ${{ env.qaUrl }}
     
     steps:
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - uses: azure/arm-deploy@v1
         id: deployStep
         with:
