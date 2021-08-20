@@ -73,8 +73,8 @@ jobs:
         with:
           subscriptionId: ${{ secrets.SUBSCRIPTIONID }}
           resourceGroupName:  ${{ env.devResourceGroup }}
-          template: /infra/azuredeploy.json
-          parameters: /infra/azuredeploy.dev.parameters.json
+          template: ./infra/azuredeploy.json
+          parameters: ./infra/azuredeploy.dev.parameters.json
 
       - name: Deployment Message
         run: echo "Deployed Application to ${{ steps.deployStep.outputs.output1 }}"
@@ -107,8 +107,8 @@ jobs:
         with:
           subscriptionId: ${{ secrets.SUBSCRIPTIONID }}
           resourceGroupName:  ${{ env.qaResourceGroup }}
-          template: /infra/azuredeploy.json
-          parameters: /infra/azuredeploy.qa.parameters.json
+          template: ./infra/azuredeploy.json
+          parameters: ./infra/azuredeploy.qa.parameters.json
 
       - name: Deployment Message
         run: echo "Deployed Application to ${{ steps.deployStep.outputs.output1 }}"
@@ -140,8 +140,8 @@ jobs:
         with:
           subscriptionId: ${{ secrets.SUBSCRIPTIONID }}
           resourceGroupName: ${{ env.prodResourceGroup }}
-          template: /infra/azuredeploy.json
-          parameters: /infra/azuredeploy.stage.parameters.json
+          template: ./infra/azuredeploy.json
+          parameters: ./infra/azuredeploy.stage.parameters.json
 
       - name: Deployment Message
         run: echo "Deployed Application to ${{ steps.deployStep.outputs.output1 }}"
