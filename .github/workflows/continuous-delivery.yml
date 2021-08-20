@@ -36,6 +36,15 @@ jobs:
       - name: Build Steps Here
         run: echo "Running build steps..."
 
+      # Publish the artificats so they are available by subsequent jobs
+      # Uploading application to build artifact
+      - name: Upload ARM Templates as Artifact
+        continue-on-error: false
+        uses: actions/upload-artifact@v2
+        with:
+          name: infra
+          path: infra
+
 
   # Deploy to the Development servers
   DeployDev:
@@ -48,10 +57,17 @@ jobs:
       url: ${{ env.devUrl }}
     
     steps:
-      #- uses: azure/login@v1
-      #  with:
-      #    creds: ${{ secrets.AZURE_CREDENTIALS }}
+      # Download Arm Templates
+      - name: Download Arm Templates
+        uses: actions/download-artifact@v2
+        continue-on-error: false
+          
+      # Log in to Azure
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      # Deploy resources to Azure
       - uses: azure/arm-deploy@v1
         id: deployStep
         with:
@@ -75,10 +91,17 @@ jobs:
       url: ${{ env.qaUrl }}
     
     steps:
+      # Download Arm Templates
+      - name: Download Arm Templates
+        uses: actions/download-artifact@v2
+        continue-on-error: false
+          
+      # Log in to Azure
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      # Deploy resources to Azure
       - uses: azure/arm-deploy@v1
         id: deployStep
         with:
@@ -101,9 +124,17 @@ jobs:
       url: ${{ env.stageUrl }}
     
     steps:
-      - name: Deploy to Stage
-        run: echo "Deploy Application to Stage"
+      # Download Arm Templates
+      - name: Download Arm Templates
+        uses: actions/download-artifact@v2
+        continue-on-error: false
+          
+      # Log in to Azure
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      # Deploy resources to Azure
       - uses: azure/arm-deploy@v1
         id: deployStep
         with:
