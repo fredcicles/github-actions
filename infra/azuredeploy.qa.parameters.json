@@ -7,6 +7,12 @@
         },
         "location": {
             "value": "eastus"
+        },
+        "planName": {
+            "value": "asp-0a1b2c-qa"
+        },
+        "webAppName": {
+            "value": "app-0a1b2c-qa"
         }
     }
 }

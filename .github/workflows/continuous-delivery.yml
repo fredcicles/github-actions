@@ -21,7 +21,6 @@ env:
   qaResourceGroup: rg-qa
   qaUrl: https://qa.application.com
   stageUrl: https://stage.application.com
-  webAppName: sample-app
 
 jobs:
   
@@ -190,10 +189,15 @@ jobs:
     steps:
       - name: Deploy to Production
         run: echo "Deploy Application to Production"
+          
+      # Log in to Azure
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       # Azure CLI command for WebApp Deployment Slot swapping
       # https://docs.microsoft.com/en-us/cli/azure/webapp/deployment/slot?view=azure-cli-latest
       - uses: azure/cli@v1
         with:
           inlineScript: |
-            az webapp deployment slot swap -g ${{ env.prodResourceGroup }} -n ${{ env.webAppName }} -s ${{ env.deploymentSlotName }}
+            az webapp deployment slot swap -g ${{ env.prodResourceGroup }} -n ${{ steps.deployStep.outputs.webAppName }} -s ${{ env.deploymentSlotName }}
