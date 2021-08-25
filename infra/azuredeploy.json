@@ -19,20 +19,95 @@
     }
   },
   "variables": {
-    "aspName": "[concat('asp-linux-', parameters('environment'))]"
+    "planName": "[concat('asp-0a1b2c-', parameters('environment'))]",
+    "webAppName": "[concat('app-0a1b2c-', parameters('environment'))]"
   },
   "resources": [
     {
       "apiVersion": "2020-12-01",
-      "name": "[variables('aspName')]",
+      "name": "[variables('planName')]",
       "type": "Microsoft.Web/serverfarms",
       "location": "[parameters('location')]",
-      "kind": "linux",
+      "kind": "app",
       "tags": {},
-      "properties": {},
+      "properties": {
+        "perSiteScaling": false,
+        "elasticScaleEnabled": false,
+        "maximumElasticWorkerCount": 1,
+        "isSpot": false,
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "targetWorkerCount": 0,
+        "targetWorkerSizeId": 0
+      },
       "sku": {
-        "Tier": "PermiumV2",
-        "Name": "P1v2"
+        "name": "S1",
+        "tier": "Standard",
+        "size": "S1",
+        "family": "S",
+        "capacity": 1
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-11-01",
+      "name": "[variables('webAppName')]",
+      "location": "[parameters('location')]",
+      "tags": {},
+      "dependsOn": [
+        "[concat('Microsoft.Web/serverfarms/', variables('planName'))]"
+      ],
+      "kind": "app",
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(variables('webAppName'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(variables('webAppName'), '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('planName'))]",
+        "siteConfig": {
+          "appSettings": [],
+          "alwaysOn": true
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/slots",
+      "apiVersion": "2020-12-01",
+      "name": "[concat(variables('webAppName'), '/stage')]",
+      "location": "East US",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
+      ],
+      "kind": "app",
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(variables('webAppName'), '-stage.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(variables('webAppName'), '-stage.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('planName'))]",
+        "siteConfig": {
+          "appSettings": [],
+          "alwaysOn": true
+        }
       }
     }
   ],
@@ -40,6 +115,10 @@
     "output1": {
       "type": "string",
       "value": "[parameters('environment')]"
+    },
+    "webAppName": {
+      "type": "string",
+      "value": "[variables('webAppName')]"
     }
   }
 }

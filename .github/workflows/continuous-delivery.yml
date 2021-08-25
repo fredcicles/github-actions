@@ -45,6 +45,15 @@ jobs:
           name: infra
           path: infra
 
+      # Publish the artificats so they are available by subsequent jobs
+      # Uploading application to build artifact
+      - name: Upload Application Build as Artifact
+        continue-on-error: false
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: src
+
 
   # Deploy to the Development servers
   DeployDev:
@@ -57,8 +66,8 @@ jobs:
       url: ${{ env.devUrl }}
     
     steps:
-      # Download Arm Templates
-      - name: Download Arm Templates
+      # Download Artifacts
+      - name: Download Artifacts
         uses: actions/download-artifact@v2
         continue-on-error: false
           
@@ -76,6 +85,13 @@ jobs:
           template: ./infra/azuredeploy.json
           parameters: ./infra/azuredeploy.dev.parameters.json
 
+      # Deploy code to web app
+      - name: Deploy code to the WebApp
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: ${{ steps.deployStep.outputs.webAppName }}
+          package: ./build
+
       - name: Deployment Message
         run: echo "Deployed Application to ${{ steps.deployStep.outputs.output1 }}"
 
@@ -91,8 +107,8 @@ jobs:
       url: ${{ env.qaUrl }}
     
     steps:
-      # Download Arm Templates
-      - name: Download Arm Templates
+      # Download Artifacts
+      - name: Download Artifacts
         uses: actions/download-artifact@v2
         continue-on-error: false
           
@@ -110,6 +126,13 @@ jobs:
           template: ./infra/azuredeploy.json
           parameters: ./infra/azuredeploy.qa.parameters.json
 
+      # Deploy code to web app
+      - name: Deploy code to the WebApp
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: ${{ steps.deployStep.outputs.webAppName }}
+          package: ./build
+
       - name: Deployment Message
         run: echo "Deployed Application to ${{ steps.deployStep.outputs.output1 }}"
 
@@ -124,8 +147,8 @@ jobs:
       url: ${{ env.stageUrl }}
     
     steps:
-      # Download Arm Templates
-      - name: Download Arm Templates
+      # Download Artifacts
+      - name: Download Artifacts
         uses: actions/download-artifact@v2
         continue-on-error: false
           
@@ -142,6 +165,14 @@ jobs:
           resourceGroupName: ${{ env.prodResourceGroup }}
           template: ./infra/azuredeploy.json
           parameters: ./infra/azuredeploy.stage.parameters.json
+
+      # Deploy code to web app
+      - name: Deploy code to the WebApp
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: ${{ steps.deployStep.outputs.webAppName }}
+          slot-name: ${{ env.deploymentSlotName }}
+          package: ./build
 
       - name: Deployment Message
         run: echo "Deployed Application to ${{ steps.deployStep.outputs.output1 }}"
