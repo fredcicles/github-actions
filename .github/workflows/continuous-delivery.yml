@@ -15,12 +15,12 @@ on:
 env:
   deploymentSlotName: stage
   devResourceGroup: rg-dev
-  devUrl: https://dev.application.com
+  devUrl: https://app-0a1b2c-dev.azurewebsites.net
   prodResourceGroup: rg-prod
-  prodUrl: https://application.com
+  prodUrl: https://app-0a1b2c.azurewebsites.net
   qaResourceGroup: rg-qa
-  qaUrl: https://qa.application.com
-  stageUrl: https://stage.application.com
+  qaUrl: https://app-0a1b2c-qa.azurewebsites.net
+  stageUrl: https://app-0a1b2c-stage.azurewebsites.net
 
 jobs:
   
@@ -144,6 +144,8 @@ jobs:
     environment: 
       name: Stage
       url: ${{ env.stageUrl }}
+    outputs:
+      webAppName: ${{ steps.deployStep.outputs.webAppName }}
     
     steps:
       # Download Artifacts
@@ -200,4 +202,4 @@ jobs:
       - uses: azure/cli@v1
         with:
           inlineScript: |
-            az webapp deployment slot swap -g ${{ env.prodResourceGroup }} -n ${{ steps.deployStep.outputs.webAppName }} -s ${{ env.deploymentSlotName }}
+            az webapp deployment slot swap -g ${{ env.prodResourceGroup }} -n ${{ needs.DeployStage.outputs.webAppName }} -s ${{ env.deploymentSlotName }}
