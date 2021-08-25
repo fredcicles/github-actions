@@ -3,7 +3,7 @@
     "contentVersion": "0.0.0.1",
     "parameters": {
         "environment": {
-            "value": "STAGE"
+            "value": "PROD"
         },
         "location": {
             "value": "eastus"
