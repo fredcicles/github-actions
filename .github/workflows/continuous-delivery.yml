@@ -163,7 +163,7 @@ jobs:
           subscriptionId: ${{ secrets.SUBSCRIPTIONID }}
           resourceGroupName: ${{ env.prodResourceGroup }}
           template: ./infra/azuredeploy.json
-          parameters: ./infra/azuredeploy.stage.parameters.json
+          parameters: ./infra/azuredeploy.prod.parameters.json
 
       # Deploy code to web app
       - name: Deploy code to the WebApp
