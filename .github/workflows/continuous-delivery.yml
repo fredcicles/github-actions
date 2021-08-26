@@ -14,12 +14,6 @@ on:
 
 env:
   deploymentSlotName: stage
-  devResourceGroup: rg-dev
-  devUrl: https://app-0a1b2c-dev.azurewebsites.net
-  prodResourceGroup: rg-prod
-  prodUrl: https://app-0a1b2c.azurewebsites.net
-  qaResourceGroup: rg-qa
-  qaUrl: https://app-0a1b2c-qa.azurewebsites.net
   stageUrl: https://app-0a1b2c-stage.azurewebsites.net
 
 jobs:
@@ -36,6 +30,7 @@ jobs:
         run: echo "Running build steps..."
 
       # Publish the artificats so they are available by subsequent jobs
+
       # Uploading application to build artifact
       - name: Upload ARM Templates as Artifact
         continue-on-error: false
@@ -44,7 +39,6 @@ jobs:
           name: infra
           path: infra
 
-      # Publish the artificats so they are available by subsequent jobs
       # Uploading application to build artifact
       - name: Upload Application Build as Artifact
         continue-on-error: false
@@ -52,6 +46,14 @@ jobs:
         with:
           name: build
           path: src
+
+      # Uploading variables folder to build artifact
+      - name: Upload Application Build as Artifact
+        continue-on-error: false
+        uses: actions/upload-artifact@v2
+        with:
+          name: variables
+          path: variables
 
 
   # Deploy to the Development servers
@@ -62,13 +64,18 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: Development
-      url: ${{ env.devUrl }}
     
     steps:
       # Download Artifacts
       - name: Download Artifacts
         uses: actions/download-artifact@v2
         continue-on-error: false
+
+      # Load Environment Variables from local file
+      - name: Load Environment Variables
+        uses: deep-mm/set-variables@v1
+        with:
+            variableFileName: ./variables/dev
           
       # Log in to Azure
       - uses: azure/login@v1
@@ -80,15 +87,15 @@ jobs:
         id: deployStep
         with:
           subscriptionId: ${{ secrets.SUBSCRIPTIONID }}
-          resourceGroupName:  ${{ env.devResourceGroup }}
+          resourceGroupName:  ${{ env.resourceGroup }}
           template: ./infra/azuredeploy.json
-          parameters: ./infra/azuredeploy.dev.parameters.json
+          parameters: ./infra/azuredeploy.dev.parameters.json webAppName=${{ env.webAppName }}
 
       # Deploy code to web app
       - name: Deploy code to the WebApp
         uses: Azure/webapps-deploy@v2
         with:
-          app-name: ${{ steps.deployStep.outputs.webAppName }}
+          app-name: ${{ env.webAppName }}
           package: ./build
 
       - name: Deployment Message
@@ -103,13 +110,18 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: QA
-      url: ${{ env.qaUrl }}
     
     steps:
       # Download Artifacts
       - name: Download Artifacts
         uses: actions/download-artifact@v2
         continue-on-error: false
+
+      # Load Environment Variables from local file
+      - name: Load Environment Variables
+        uses: deep-mm/set-variables@v1
+        with:
+            variableFileName: ./variables/qa
           
       # Log in to Azure
       - uses: azure/login@v1
@@ -121,15 +133,15 @@ jobs:
         id: deployStep
         with:
           subscriptionId: ${{ secrets.SUBSCRIPTIONID }}
-          resourceGroupName:  ${{ env.qaResourceGroup }}
+          resourceGroupName:  ${{ env.resourceGroup }}
           template: ./infra/azuredeploy.json
-          parameters: ./infra/azuredeploy.qa.parameters.json
+          parameters: ./infra/azuredeploy.qa.parameters.json webAppName=${{ env.webAppName }}
 
       # Deploy code to web app
       - name: Deploy code to the WebApp
         uses: Azure/webapps-deploy@v2
         with:
-          app-name: ${{ steps.deployStep.outputs.webAppName }}
+          app-name: ${{ env.webAppName }}
           package: ./build
 
       - name: Deployment Message
@@ -143,15 +155,18 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: Stage
-      url: ${{ env.stageUrl }}
-    outputs:
-      webAppName: ${{ steps.deployStep.outputs.webAppName }}
     
     steps:
       # Download Artifacts
       - name: Download Artifacts
         uses: actions/download-artifact@v2
         continue-on-error: false
+
+      # Load Environment Variables from local file
+      - name: Load Environment Variables
+        uses: deep-mm/set-variables@v1
+        with:
+            variableFileName: ./variables/prod
           
       # Log in to Azure
       - uses: azure/login@v1
@@ -163,15 +178,15 @@ jobs:
         id: deployStep
         with:
           subscriptionId: ${{ secrets.SUBSCRIPTIONID }}
-          resourceGroupName: ${{ env.prodResourceGroup }}
+          resourceGroupName: ${{ env.resourceGroup }}
           template: ./infra/azuredeploy.json
-          parameters: ./infra/azuredeploy.prod.parameters.json
+          parameters: ./infra/azuredeploy.prod.parameters.json webAppName=${{ env.webAppName }}
 
       # Deploy code to web app
       - name: Deploy code to the WebApp
         uses: Azure/webapps-deploy@v2
         with:
-          app-name: ${{ steps.deployStep.outputs.webAppName }}
+          app-name: ${{ env.webAppName }}
           slot-name: ${{ env.deploymentSlotName }}
           package: ./build
 
@@ -186,11 +201,18 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: Production
-      url: ${{ env.prodUrl }}
 
     steps:
-      - name: Deploy to Production
-        run: echo "Deploy Application to Production"
+      # Download Artifacts
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        continue-on-error: false
+
+      # Load Environment Variables from local file
+      - name: Load Environment Variables
+        uses: deep-mm/set-variables@v1
+        with:
+            variableFileName: ./variables/prod
           
       # Log in to Azure
       - uses: azure/login@v1
@@ -202,4 +224,4 @@ jobs:
       - uses: azure/cli@v1
         with:
           inlineScript: |
-            az webapp deployment slot swap -g ${{ env.prodResourceGroup }} -n ${{ needs.DeployStage.outputs.webAppName }} -s ${{ env.deploymentSlotName }}
+            az webapp deployment slot swap -g ${{ env.resourceGroup }} -n ${{ env.webAppName }} -s ${{ env.deploymentSlotName }}
