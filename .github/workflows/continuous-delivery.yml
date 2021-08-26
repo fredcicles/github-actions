@@ -72,7 +72,7 @@ jobs:
       - name: Load Environment Variables
         uses: fredcicles/github-actions/.github/actions/set-variables@samples/variable-files
         with:
-            variableFileName: dev
+            variableFileName: ./variables/dev
           
       # Log in to Azure
       - uses: azure/login@v1
@@ -118,7 +118,7 @@ jobs:
       - name: Load Environment Variables
         uses: fredcicles/github-actions/.github/actions/set-variables@samples/variable-files
         with:
-            variableFileName: qa
+            variableFileName: ./variables/qa
           
       # Log in to Azure
       - uses: azure/login@v1
@@ -163,7 +163,7 @@ jobs:
       - name: Load Environment Variables
         uses: fredcicles/github-actions/.github/actions/set-variables@samples/variable-files
         with:
-            variableFileName: prod
+            variableFileName: ./variables/prod
           
       # Log in to Azure
       - uses: azure/login@v1
@@ -209,7 +209,7 @@ jobs:
       - name: Load Environment Variables
         uses: fredcicles/github-actions/.github/actions/set-variables@samples/variable-files
         with:
-            variableFileName: prod
+            variableFileName: ./variables/prod
           
       # Log in to Azure
       - uses: azure/login@v1
