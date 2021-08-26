@@ -1,0 +1,12 @@
+{
+    "variables": [
+      {
+        "name": "resourceGroup",
+        "value": "rg-dev"
+      },
+      {
+        "name": "webAppName",
+        "value": "app-0a1b2c-dev"
+      }      
+    ]
+  }

@@ -1,0 +1,16 @@
+{
+    "variables": [
+      {
+        "name": "deploymentSlotName",
+        "value": "stage"
+      },
+      {
+        "name": "resourceGroup",
+        "value": "rg-prod"
+      },
+      {
+        "name": "webAppName",
+        "value": "app-0a1b2c"
+      }
+    ]
+  }
