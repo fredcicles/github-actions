@@ -70,7 +70,7 @@ jobs:
 
       # Load Environment Variables from local file
       - name: Load Environment Variables
-        uses: actions/set-variables
+        uses: fredcicles/set-variables
         with:
             variableFileName: dev
           
@@ -116,7 +116,7 @@ jobs:
 
       # Load Environment Variables from local file
       - name: Load Environment Variables
-        uses: actions/set-variables
+        uses: fredcicles/set-variables
         with:
             variableFileName: qa
           
@@ -161,7 +161,7 @@ jobs:
 
       # Load Environment Variables from local file
       - name: Load Environment Variables
-        uses: actions/set-variables
+        uses: fredcicles/set-variables
         with:
             variableFileName: prod
           
@@ -207,7 +207,7 @@ jobs:
 
       # Load Environment Variables from local file
       - name: Load Environment Variables
-        uses: actions/set-variables
+        uses: fredcicles/set-variables
         with:
             variableFileName: prod
           
