@@ -26,9 +26,6 @@ jobs:
       # Checks-out the repository under $GITHUB_WORKSPACE, so the job can access it
       - uses: actions/checkout@v2
 
-      - name: Build Steps Here
-        run: echo "Running build steps..."
-
       # Publish the artificats so they are available by subsequent jobs
 
       # Uploading application to build artifact
@@ -53,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: variables
-          path: variables
+          path: .github/variables
 
 
   # Deploy to the Development servers
@@ -73,9 +70,9 @@ jobs:
 
       # Load Environment Variables from local file
       - name: Load Environment Variables
-        uses: deep-mm/set-variables@v1
+        uses: actions/set-variables
         with:
-            variableFileName: ./variables/dev
+            variableFileName: dev
           
       # Log in to Azure
       - uses: azure/login@v1
@@ -119,9 +116,9 @@ jobs:
 
       # Load Environment Variables from local file
       - name: Load Environment Variables
-        uses: deep-mm/set-variables@v1
+        uses: actions/set-variables
         with:
-            variableFileName: ./variables/qa
+            variableFileName: qa
           
       # Log in to Azure
       - uses: azure/login@v1
@@ -164,9 +161,9 @@ jobs:
 
       # Load Environment Variables from local file
       - name: Load Environment Variables
-        uses: deep-mm/set-variables@v1
+        uses: actions/set-variables
         with:
-            variableFileName: ./variables/prod
+            variableFileName: prod
           
       # Log in to Azure
       - uses: azure/login@v1
@@ -210,9 +207,9 @@ jobs:
 
       # Load Environment Variables from local file
       - name: Load Environment Variables
-        uses: deep-mm/set-variables@v1
+        uses: actions/set-variables
         with:
-            variableFileName: ./variables/prod
+            variableFileName: prod
           
       # Log in to Azure
       - uses: azure/login@v1
