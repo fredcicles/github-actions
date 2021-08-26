@@ -1,6 +1,10 @@
 {
     "variables": [
       {
+        "name": "deploymentSlotName",
+        "value": "stage"
+      },
+      {
         "name": "resourceGroup",
         "value": "rg-prod"
       },

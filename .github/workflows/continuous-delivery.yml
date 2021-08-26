@@ -12,10 +12,6 @@ on:
   pull_request:
     branches: [main]
 
-env:
-  deploymentSlotName: stage
-  stageUrl: https://app-0a1b2c-stage.azurewebsites.net
-
 jobs:
   
   # Build Application
