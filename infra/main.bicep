@@ -12,6 +12,7 @@ targetScope = 'subscription'
 param environment string
 param planName string
 param rgName string
+param slotName string = 'stage'
 param webAppName string
 
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -42,7 +43,7 @@ module slotDeploy 'slot.bicep' = if (environment == 'PROD') {
   scope: rg
   params: {
     planId: appPlanDeploy.outputs.planId
-    slotName: 'stage'
+    slotName: slotName
     webAppName: webAppName
   }
 }
