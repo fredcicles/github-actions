@@ -5,8 +5,8 @@
         "environment": {
             "value": "PROD"
         },
-        "location": {
-            "value": "eastus"
+        "rgName": {
+            "value": "rg-prod"
         },
         "planName": {
             "value": "asp-0a1b2c"

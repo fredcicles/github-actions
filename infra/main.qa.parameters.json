@@ -5,8 +5,8 @@
         "environment": {
             "value": "QA"
         },
-        "location": {
-            "value": "eastus"
+        "rgName": {
+            "value": "rg-qa"
         },
         "planName": {
             "value": "asp-0a1b2c-qa"

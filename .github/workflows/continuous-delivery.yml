@@ -14,13 +14,8 @@ on:
 
 env:
   deploymentSlotName: stage
-  devResourceGroup: rg-dev
-  devUrl: https://app-0a1b2c-dev.azurewebsites.net
+  location: eastus
   prodResourceGroup: rg-prod
-  prodUrl: https://app-0a1b2c.azurewebsites.net
-  qaResourceGroup: rg-qa
-  qaUrl: https://app-0a1b2c-qa.azurewebsites.net
-  stageUrl: https://app-0a1b2c-stage.azurewebsites.net
 
 jobs:
   
@@ -62,7 +57,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: Development
-      url: ${{ env.devUrl }}
     
     steps:
       # Download Artifacts
@@ -79,10 +73,11 @@ jobs:
       - uses: azure/arm-deploy@v1
         id: deployStep
         with:
+          scope: subscription
           subscriptionId: ${{ secrets.SUBSCRIPTIONID }}
-          resourceGroupName:  ${{ env.devResourceGroup }}
-          template: ./infra/azuredeploy.json
-          parameters: ./infra/azuredeploy.dev.parameters.json
+          location: ${{ env.location }}
+          template: ./infra/main.bicep
+          parameters: ./infra/main.dev.parameters.json
 
       # Deploy code to web app
       - name: Deploy code to the WebApp
@@ -103,7 +98,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: QA
-      url: ${{ env.qaUrl }}
     
     steps:
       # Download Artifacts
@@ -120,10 +114,10 @@ jobs:
       - uses: azure/arm-deploy@v1
         id: deployStep
         with:
+          scope: subscription
           subscriptionId: ${{ secrets.SUBSCRIPTIONID }}
-          resourceGroupName:  ${{ env.qaResourceGroup }}
-          template: ./infra/azuredeploy.json
-          parameters: ./infra/azuredeploy.qa.parameters.json
+          template: ./infra/main.bicep
+          parameters: ./infra/main.qa.parameters.json
 
       # Deploy code to web app
       - name: Deploy code to the WebApp
@@ -143,7 +137,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: Stage
-      url: ${{ env.stageUrl }}
+
     outputs:
       webAppName: ${{ steps.deployStep.outputs.webAppName }}
     
@@ -162,10 +156,10 @@ jobs:
       - uses: azure/arm-deploy@v1
         id: deployStep
         with:
+          scope: subscription
           subscriptionId: ${{ secrets.SUBSCRIPTIONID }}
-          resourceGroupName: ${{ env.prodResourceGroup }}
-          template: ./infra/azuredeploy.json
-          parameters: ./infra/azuredeploy.prod.parameters.json
+          template: ./infra/main.bicep
+          parameters: ./infra/main.prod.parameters.json
 
       # Deploy code to web app
       - name: Deploy code to the WebApp
@@ -186,7 +180,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: Production
-      url: ${{ env.prodUrl }}
 
     steps:
       - name: Deploy to Production

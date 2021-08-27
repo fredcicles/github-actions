@@ -5,11 +5,11 @@
         "environment": {
             "value": "DEV"
         },
-        "location": {
-            "value": "eastus"
-        },
         "planName": {
             "value": "asp-0a1b2c-dev"
+        },
+        "rgName": {
+            "value": "rg-dev"
         },
         "webAppName": {
             "value": "app-0a1b2c-dev"
