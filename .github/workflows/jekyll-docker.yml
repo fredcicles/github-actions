@@ -12,7 +12,7 @@ jobs:
     steps:
     - name: Retrieve Random Number
       id: random-number-generator
-      uses: msfred/.github/.github/actions/composite@main
+      uses: githubabcs/hello-world-composite-action@main
       
     - name: Display Output from previous job
       run: echo ${{ steps.random-number-generator.outputs.random-number }}
