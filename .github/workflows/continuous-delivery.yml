@@ -28,7 +28,7 @@ jobs:
 
     steps:
       # Checks-out the repository under $GITHUB_WORKSPACE, so the job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Build Steps Here
         run: echo "Running build steps..."
@@ -37,7 +37,7 @@ jobs:
       # Uploading application to build artifact
       - name: Upload ARM Templates as Artifact
         continue-on-error: false
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: infra
           path: infra
@@ -46,7 +46,7 @@ jobs:
       # Uploading application to build artifact
       - name: Upload Application Build as Artifact
         continue-on-error: false
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build
           path: src
@@ -64,7 +64,7 @@ jobs:
     steps:
       # Download Artifacts
       - name: Download Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         continue-on-error: false
           
       # Log in to Azure
@@ -105,7 +105,7 @@ jobs:
     steps:
       # Download Artifacts
       - name: Download Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         continue-on-error: false
           
       # Log in to Azure
@@ -148,7 +148,7 @@ jobs:
     steps:
       # Download Artifacts
       - name: Download Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         continue-on-error: false
           
       # Log in to Azure
