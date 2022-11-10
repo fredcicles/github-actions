@@ -10,7 +10,7 @@ targetScope = 'subscription'
   'PROD'
 ])
 param environment string
-param location string = resourceGroup().location
+param location string
 param planName string
 param rgName string
 param slotName string = 'stage'
