@@ -6,7 +6,7 @@
             "value": "DEV"
         },
         "location": {
-            "value": "EastUS2"
+            "value": "eastus"
         },
         "planName": {
             "value": "asp-0a1b2c-dev"
