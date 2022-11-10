@@ -1,9 +1,10 @@
+param location string = resourceGroup().location
 param planId string
 param webAppName string
 
 resource webApp 'Microsoft.Web/sites@2021-01-15' = {
   name: webAppName
-  location: resourceGroup().location
+  location: location
   kind: 'app'
   properties: {
     enabled: true
