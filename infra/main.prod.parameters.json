@@ -6,10 +6,10 @@
             "value": "PROD"
         },
         "location": {
-            "value": "EastUS2"
+            "value": "eastus"
         },
         "rgName": {
-            "value": "rg-prod"
+            "value": "rg-gha-sample-prod"
         },
         "planName": {
             "value": "asp-0a1b2c"
