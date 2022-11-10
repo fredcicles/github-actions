@@ -10,6 +10,7 @@ targetScope = 'subscription'
   'PROD'
 ])
 param environment string
+param location string = resourceGroup().location
 param planName string
 param rgName string
 param slotName string = 'stage'
@@ -17,7 +18,7 @@ param webAppName string
 
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: rgName
-  location: deployment().location
+  location: location
 }
 
 module appPlanDeploy 'appPlan.bicep' = {
@@ -25,6 +26,7 @@ module appPlanDeploy 'appPlan.bicep' = {
   scope: rg
   params: {
     environment: environment
+    location: location
     planName: planName    
   }
 }
@@ -33,6 +35,7 @@ module webAppDeploy 'webApp.bicep' = {
   name: 'webAppDeploy'
   scope: rg
   params: {
+    location: location
     planId: appPlanDeploy.outputs.planId
     webAppName: webAppName
   }
@@ -42,6 +45,7 @@ module slotDeploy 'slot.bicep' = if (environment == 'PROD') {
   name: 'slotDeploy'
   scope: rg
   params: {
+    location: location
     planId: appPlanDeploy.outputs.planId
     slotName: slotName
     webAppName: webAppName
