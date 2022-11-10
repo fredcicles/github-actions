@@ -93,7 +93,7 @@ jobs:
 
       # Deploy code to web app
       - name: Deploy code to the WebApp
-        uses: fredgohsman/webapps-deploy@master
+        uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.deployStep.outputs.webAppName }}
           package: ./build
@@ -136,7 +136,7 @@ jobs:
 
       # Deploy code to web app
       - name: Deploy code to the WebApp
-        uses: fredgohsman/webapps-deploy@master
+        uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.deployStep.outputs.webAppName }}
           package: ./build
@@ -181,7 +181,7 @@ jobs:
 
       # Deploy code to web app
       - name: Deploy code to the WebApp
-        uses: fredgohsman/webapps-deploy@master
+        uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.deployStep.outputs.webAppName }}
           slot-name: ${{ env.deploymentSlotName }}
