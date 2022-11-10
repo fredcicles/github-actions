@@ -9,7 +9,7 @@
             "value": "EastUS2"
         },
         "rgName": {
-            "value": "rg-qa"
+            "value": "rg-gha-sample-qa"
         },
         "planName": {
             "value": "asp-0a1b2c-qa"
