@@ -11,6 +11,9 @@
         "planName": {
             "value": "asp-0a1b2c-dev"
         },
+        "rgName": {
+            "value": "rg-gha-sample-dev"
+        },
         "webAppName": {
             "value": "app-0a1b2c-dev"
         }

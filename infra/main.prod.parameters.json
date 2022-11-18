@@ -3,16 +3,19 @@
     "contentVersion": "0.0.0.1",
     "parameters": {
         "environment": {
-            "value": "QA"
+            "value": "PROD"
         },
         "location": {
             "value": "eastus"
         },
+        "rgName": {
+            "value": "rg-gha-sample-prod"
+        },
         "planName": {
-            "value": "asp-0a1b2c-qa"
+            "value": "asp-0a1b2c"
         },
         "webAppName": {
-            "value": "app-0a1b2c-qa"
+            "value": "app-0a1b2c"
         }
     }
 }
