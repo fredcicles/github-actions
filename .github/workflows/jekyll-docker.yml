@@ -1,0 +1,18 @@
+name: Reference a Composite Action
+
+on: 
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Retrieve Random Number
+      id: random-number-generator
+      uses: githubabcs/hello-world-composite-action@main
+      
+    - name: Display Output from previous job
+      run: echo ${{ steps.random-number-generator.outputs.random-number }}
